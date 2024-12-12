@@ -1,0 +1,16 @@
+{
+"PRODCUTOS" :[
+    {
+        "nombre": "Producto1",
+        "categoria": "Categoria1",
+        "precio": 1,
+        "stock": 1
+    },
+    {
+        "nombre": "Producto2",
+        "categoria": "Categoria2",
+        "precio": 1,
+        "stock": 1
+    }
+]
+}
