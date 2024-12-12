@@ -76,6 +76,15 @@ async function agregar_producto(){
             console.clear();
             menu();
     }
+
+    console.clear();
+
+    // Llama a las funciones de forma asíncrona
+    const nombre = await agregar_producto_nombre();
+    const categoria = await agregar_producto_categoria();
+    const precio = await agregar_producto_precio();
+    const stock = await agregar_producto_stock();
+    
     async function agregar_producto_nombre(){
         //Agregar nombre
         let nombre = await input ("Introduce el nombre del producto: ");
@@ -84,7 +93,7 @@ async function agregar_producto(){
             nombre = await input ("Introduce el nombre del producto: ");
         }
         return nombre;
-    }agregar_producto_categoria();
+    }
     async function agregar_producto_categoria(){
         //Agregar listado de gategorias
         console.log("Categorias existentes: ");
@@ -94,28 +103,30 @@ async function agregar_producto(){
         }
         let categoria = await input ("Introduce la categoría del producto: ");
         return categoria;
-    }agregar_producto_precio();
+    }
     async function agregar_producto_precio(){
         //Agregar precio
         let precio = Number (await input("Introduce el precio para el artículo: "));
-        while (precio == NaN || precio < 0){
+        while (isNaN(precio) || precio < 0){
             console.log("Has especificado un precio inválido!");
             precio = Number (await input("Introduce el precio para el artículo: "));
         }
         return precio;
-    }agregar_producto_stock();
+    }
     async function agregar_producto_stock(){
         //Agregar stock
         let stock = Number (await input("Introduce el stock del producto: "));
-        while (stock == NaN || stock < 0){
+        while (isNaN(precio) || stock < 0){
             console.log("Has especificado un stock inválido (El stock no puede ser negativo)");
             Number (await input("Introduce el stock del producto: "));
         }
         return stock;
     }
-    const nuevo_producto = new GESTOR_INVENTARIO(agregar_producto_nombre, agregar_producto_categoria, agregar_producto_precio, agregar_producto_stock);
+    const nuevo_producto = new GESTOR_INVENTARIO(nombre, categoria, precio, stock);
     
     //Guardado del producto
     nuevo_producto.agregar_producto();
     console.log(`Producto guardado correctamente.`);
 }
+
+menu();
