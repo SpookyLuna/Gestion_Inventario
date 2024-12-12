@@ -35,8 +35,8 @@ async function menu(){
 let opcion = Number(await input ("Selecciona una opción: "));
 switch (opcion){
     case 1:
-        agregar_producto();
         console.clear();
+        agregar_producto();
         break;
     case 2:
         console.clear();
@@ -64,21 +64,6 @@ switch (opcion){
 }
 async function agregar_producto(){
 
-    console.log(`
-        === Gestor de Inventario ===
-        ¿Quieres añadir un nuevo producto?`);
-    let opcion = await input ("Introduce S para confirmar y N para volver atrás.");
-    switch (opcion){
-        case "S": case "s":
-            console.clear();
-            agregar_producto_nombre();
-        case "N": case "n":
-            console.clear();
-            menu();
-    }
-
-    console.clear();
-
     // Llama a las funciones de forma asíncrona
     const nombre = await agregar_producto_nombre();
     const categoria = await agregar_producto_categoria();
@@ -87,6 +72,10 @@ async function agregar_producto(){
     
     async function agregar_producto_nombre(){
         //Agregar nombre
+        console.log(`
+            === Gestor de Inventario ===
+               === Nuevo Producto ===
+            `)
         let nombre = await input ("Introduce el nombre del producto: ");
         while (nombre == "" || regex.test(nombre) == true){
             console.log("Has especificado un nombre vacio o inválido. No emplees caracteres especiales!");
@@ -94,18 +83,23 @@ async function agregar_producto(){
         }
         return nombre;
     }
-    async function agregar_producto_categoria(){
+    async function agregar_producto_categoria(){        
         //Agregar listado de gategorias
-        console.log("Categorias existentes: ");
-        for (let i = 0; productos.length; i++){
-            console.log(`
-                Categoría ${i}: ${productos[i].categoria}`);
-        }
+        console.clear();
+        console.log(`
+            === Gestor de Inventario ===
+               === Nuevo Producto ===
+            `)
         let categoria = await input ("Introduce la categoría del producto: ");
         return categoria;
     }
     async function agregar_producto_precio(){
         //Agregar precio
+        console.clear();
+        console.log(`
+            === Gestor de Inventario ===
+               === Nuevo Producto ===
+            `)
         let precio = Number (await input("Introduce el precio para el artículo: "));
         while (isNaN(precio) || precio < 0){
             console.log("Has especificado un precio inválido!");
@@ -115,6 +109,11 @@ async function agregar_producto(){
     }
     async function agregar_producto_stock(){
         //Agregar stock
+        console.clear();
+        console.log(`
+            === Gestor de Inventario ===
+               === Nuevo Producto ===
+            `)
         let stock = Number (await input("Introduce el stock del producto: "));
         while (isNaN(precio) || stock < 0){
             console.log("Has especificado un stock inválido (El stock no puede ser negativo)");
@@ -126,7 +125,6 @@ async function agregar_producto(){
     
     //Guardado del producto
     nuevo_producto.agregar_producto();
-    console.log(`Producto guardado correctamente.`);
 }
 
 menu();
