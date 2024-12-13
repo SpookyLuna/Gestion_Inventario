@@ -1,18 +1,25 @@
-//Import de la case
-const GESTOR_INVENTARIO = require('./gestor_inventario');
-//Integracion de readline
-const readline = require('readline');
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
 
-async function input(prompt) {
-    return new Promise(resolve => rl.question(prompt, resolve));
-}
+//////////////////////////////////////////////////////////////////////
+                                                                    //
+//Import de la case y llamada métodos                               //
+const GESTOR_INVENTARIO = require('./gestor_inventario');           //
+                                                                    //
+//Integracion de readline                                           //
+const readline = require('readline');                               //
+const rl = readline.createInterface({                               //
+    input: process.stdin,                                           //
+    output: process.stdout                                          //
+});                                                                 //
+                                                                    //
+async function input(prompt) {                                      //
+    return new Promise(resolve => rl.question(prompt, resolve));    //
+}                                                                   //
+                                                                    //
+//Caracteres especiales                                             //
+const regex = /[!@#$%^&*()\-+={}[\]:;"'<>,.?\/|\\]/                 //
+                                                                    //
+//////////////////////////////////////////////////////////////////////
 
-//Caracteres especiales
-const regex = /[!@#$% ^&*()\-+={}[\]:;"'<>,.?\/ |\\]/
 
 //Funcion menu
 async function menu(){
@@ -40,6 +47,10 @@ switch (opcion){
         break;
     case 2:
         console.clear();
+        GESTOR_INVENTARIO.listar_producto();
+        let regreso = await input ("Pulsa enter para volver...");
+            console.clear();
+            menu();
         break;
     case 3:
         console.clear();
@@ -125,6 +136,7 @@ async function agregar_producto(){
     
     //Guardado del producto
     nuevo_producto.agregar_producto();
+    menu();
 }
 
 menu();
