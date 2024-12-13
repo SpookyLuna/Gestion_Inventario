@@ -1,24 +1,29 @@
 
-//////////////////////////////////////////////////////////////////////
-                                                                    //
-//Import de la case y llamada métodos                               //
-const GESTOR_INVENTARIO = require('./gestor_inventario');           //
-                                                                    //
-//Integracion de readline                                           //
-const readline = require('readline');                               //
-const rl = readline.createInterface({                               //
-    input: process.stdin,                                           //
-    output: process.stdout                                          //
-});                                                                 //
-                                                                    //
-async function input(prompt) {                                      //
-    return new Promise(resolve => rl.question(prompt, resolve));    //
-}                                                                   //
-                                                                    //
-//Caracteres especiales                                             //
-const regex = /[!@#$%^&*()\-+={}[\]:;"'<>,.?\/|\\]/                 //
-                                                                    //
-//////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+                                                                     //
+//Import de la case y llamada métodos                                //
+const GESTOR_INVENTARIO = require('./gestor_inventario');            //
+                                                                     //
+//Integracion de readline                                            //
+const readline = require('readline');                                //
+const rl = readline.createInterface({                                //
+    input: process.stdin,                                            //
+    output: process.stdout                                           //
+});                                                                  //
+                                                                     //
+//Imports                                                            //
+const fs = require('fs');                                            //
+//Lectura del json y parseo.                                         //
+const data = JSON.parse(fs.readFileSync('./productos.json', 'utf8'));//   
+                                                                     //
+async function input(prompt) {                                       //
+    return new Promise(resolve => rl.question(prompt, resolve));     //
+}                                                                    //
+                                                                     //
+//Caracteres especiales                                              //
+const regex = /[!@#$%^&*()\-+={}[\]:;"'<>,.?\/|\\]/                  //
+                                                                     //
+///////////////////////////////////////////////////////////////////////
 
 
 //Funcion menu
@@ -54,9 +59,11 @@ switch (opcion){
         break;
     case 3:
         console.clear();
+        buscar_producto();
         break;
     case 4:
         console.clear();
+        actualizar_producto();
         break;
     case 5:
         console.clear();
@@ -124,7 +131,7 @@ async function agregar_producto(){
         console.log(`
             === Gestor de Inventario ===
                === Nuevo Producto ===
-            `)
+            `);
         let stock = Number (await input("Introduce el stock del producto: "));
         while (isNaN(precio) || stock < 0){
             console.log("Has especificado un stock inválido (El stock no puede ser negativo)");
@@ -137,6 +144,95 @@ async function agregar_producto(){
     //Guardado del producto
     nuevo_producto.agregar_producto();
     menu();
+}
+
+async function buscar_producto(){
+    //Buscar producto
+    console.log(`
+        === Gestor de Inventario ===
+           === Buscar Producto ===
+
+           1-Nombre
+           2-Categoria
+        `);
+    
+    let opcion = Number(await input ("Selecciona el filtro de búsqueda: "));
+    switch (opcion){
+        case 1:
+            let nombre = await input ("Introduce el nombre: ");
+            const nombre_buscar = new GESTOR_INVENTARIO(nombre);
+            nombre_buscar.buscar_producto_nombre();
+            let regreso = await input ("Pulsa enter para volver...");
+                console.clear();
+                menu();
+            break;
+        case 2:
+            let categoria = await input ("Introduce la categoria: ");
+            const categoria_buscar = new GESTOR_INVENTARIO(categoria);
+            categoria_buscar.buscar_producto_categoria();
+                regreso = await input ("Pulsa enter para volver...");
+                console.clear();
+                menu();
+                break;
+        default:
+            console.clear();
+            buscar_producto();
+            break;
+
+    }
+}
+
+async function actualizar_producto(){
+    //Actualizar producto
+    const productos = data.PRODUCTOS;
+    console.log(`
+        === Gestor de Inventario ===
+           === Actualizar Producto ===
+
+           1-Stock
+           2-Precio
+        `);
+    
+    let opcion = Number(await input ("Selecciona una opción: "));
+    switch (opcion){
+        case 1:
+            let contador = 0;
+            if (productos.length != 0){
+                productos.forEach(producto => {
+                    contador++;
+                    console.log(`
+                    Producto: ${contador}
+                    Nombre: ${producto.nombre}
+                    Categoría: ${producto.categoria}
+                    Precio: ${producto.precio}
+                    Stock: ${producto.stock}
+                    `);
+                });
+
+                let producto_nuevo_stock = Number(await input ("Selecciona el producto: "));
+                if (producto_nuevo_stock >= 0 && producto_nuevo_stock <= productos.length){
+                    let nuevo_stock = Number(await input ("Introduce el nuevo stock: "));
+                    if (nuevo_stock >= 0){
+                        productos[producto_nuevo_stock].stock = nuevo_stock;
+                        console.log(`Producto ${productos[producto_nuevo_stock].nombre} actualizado correctamente. Nuevo stock: ${productos[producto_nuevo_stock].stock}`);
+                    }
+                }
+                else{
+                    console.log("A");
+                }
+            }
+            else{
+                console.log("No hay productos registrados.")
+            }
+            break;
+        case 2:
+                break;
+        default:
+            console.clear();
+            actualizar_producto();
+            break;
+
+    }
 }
 
 menu();
