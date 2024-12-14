@@ -213,11 +213,14 @@ async function actualizar_producto(){
                     let nuevo_stock = Number(await input ("Introduce el nuevo stock: "));
                     if (nuevo_stock >= 0){
                         productos[producto_nuevo_stock].stock = nuevo_stock;
+                        //Guardado del producto actualizado en el json
+                        fs.writeFileSync('./productos.json', JSON.stringify(data, null, 4, 'utf8'));
                         console.log(`Producto ${productos[producto_nuevo_stock].nombre} actualizado correctamente. Nuevo stock: ${productos[producto_nuevo_stock].stock}`);
                     }
                 }
                 else{
-                    console.log("A");
+                    console.log("Has seleccionado un producto inexistente.");
+                    actualizar_producto();
                 }
             }
             else{
