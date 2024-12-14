@@ -272,28 +272,44 @@ async function eliminar_producto(){
           === Eliminar Producto ===
         `);
     if (productos.length != 0){
+        let contador = 0;
         productos.forEach(producto => {
             contador++;
             console.log(`
             Producto: ${contador}
             Nombre: ${producto.nombre}
             Categoría: ${producto.categoria}
-            Precio: ${producto.precio}
+            Precio: ${producto.precio} €
             Stock: ${producto.stock}
             `);
         });
-    }
 
-    let producto_eliminar = Number(await input ("Selecciona el producto a eliminar: "));
-    if (producto_eliminar >= 0 && producto_eliminar <= productos.length){
-        let confirmacion = await input (`¿Estás seguro de que quieres eliminar el producto ${productos[producto_eliminar].nombre}?`);
-        switch (confirmacion){
-            case "s":  case "S":
-            case "n": case "N":
-               menu();
-            default:
-                eliminar_producto();
+        let producto_eliminar = Number(await input ("Selecciona el producto a eliminar: "));
+        if (producto_eliminar >= 0 && producto_eliminar <= productos.length){
+            let confirmacion = await input (`¿Estás seguro de que quieres eliminar el producto ${productos[producto_eliminar].nombre}?`);
+            switch (confirmacion){
+                case "s":  case "S":
+                    const gestor = new GESTOR_INVENTARIO();
+                    gestor.eliminarProducto(producto_eliminar); //Envia la informacion a gestor inventario
+                    menu(); //Regresa al menu
+                    break;
+                case "n": case "N":
+                    console.clear();
+                    menu();
+                    break;
+                default:
+                    console.clear();
+                    eliminar_producto();
+                    break;
+            }
         }
+        else{
+            console.log("Has seleccionado un producto inexistente.");
+            eliminar_producto();
+        }
+    }
+    else{
+        console.log("No hay productos registrados.");
     }
 }
 
