@@ -67,6 +67,7 @@ switch (opcion){
         break;
     case 5:
         console.clear();
+        eliminar_producto();
         break;
     case 6:
         console.clear();
@@ -200,7 +201,7 @@ async function actualizar_producto(){
                 productos.forEach(producto => {
                     contador++;
                     console.log(`
-                    Producto: ${contador}
+                    Producto: ${contador-1}
                     Nombre: ${producto.nombre}
                     Categoría: ${producto.categoria}
                     Precio: ${producto.precio}
@@ -228,11 +229,74 @@ async function actualizar_producto(){
             }
             break;
         case 2:
+            contador = 0;
+            if (productos.length != 0){
+                productos.forEach(producto => {
+                    contador++;
+                    console.log(`
+                    Producto: ${contador}
+                    Nombre: ${producto.nombre}
+                    Categoría: ${producto.categoria}
+                    Precio: ${producto.precio}
+                    Stock: ${producto.stock}
+                    `);
+                });
+
+                let producto_nuevo_precio = Number(await input ("Selecciona el producto: "));
+                if (producto_nuevo_precio >= 0 && producto_nuevo_precio <= productos.length){
+                    let nuevo_precio = Number(await input ("Introduce el nuevo precio: "));
+                    if (nuevo_precio >= 0){
+                        productos[producto_nuevo_precio].precio = nuevo_precio;
+                        //Guardado del producto actualizado en el json
+                        fs.writeFileSync('./productos.json', JSON.stringify(data, null, 4, 'utf8'));
+                        console.log(`Producto ${productos[producto_nuevo_stock].nombre} actualizado correctamente. Nuevo precio: ${productos[producto_nuevo_precio].precio}`);
+                    }
+                }
+                else{
+                    console.log("Has seleccionado un producto inexistente.");
+                    actualizar_producto();
+                }
+            }
+            else{
+                console.log("No hay productos registrados.")
+            }
                 break;
         default:
             console.clear();
             actualizar_producto();
             break;
+    }
+}
+
+async function eliminar_producto(){
+    //Eliminar producto
+    console.log(`
+        === Gestor de Inventario ===
+          === Eliminar Producto ===
+        `);
+    if (productos.length != 0){
+        productos.forEach(producto => {
+            contador++;
+            console.log(`
+            Producto: ${contador}
+            Nombre: ${producto.nombre}
+            Categoría: ${producto.categoria}
+            Precio: ${producto.precio}
+            Stock: ${producto.stock}
+            `);
+        });
+    }
+
+    let producto_eliminar = Number(await input ("Selecciona el producto a eliminar: "));
+    if (producto_eliminar >= 0 && producto_eliminar <= productos.length){
+        let confirmacion = await input (`¿Estás seguro de que quieres eliminar el producto ${productos[producto_eliminar].nombre}?`);
+        switch (confirmacion){
+            case "s":  case "S":
+            case "n": case "N":
+               menu();
+            default:
+                eliminar_producto();
+        }
     }
 }
 
