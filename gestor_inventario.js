@@ -3,16 +3,14 @@
 //Imports                                                                                                             //
 const fs = require('fs');                                                                                             //
 //Lectura del json y parseo. No uso require para poder actualizar posteriormente los datos de los productos.          //
-const data = JSON.parse(fs.readFileSync('./productos.json', 'utf8'));                                                 //
+const data = JSON.parse(fs.readFileSync('./productos.json', 'utf8'));    
+const productos = data.PRODUCTOS;                                             //
                                                                                                                       //                                                                                                                                                                                                                       //
 async function input(prompt) {                                                                                        //
     return new Promise(resolve => rl.question(prompt, resolve));                                                      //
 }                                                                                                                     //
                                                                                                                       //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//
-const productos = data.PRODUCTOS;
 
 class GESTOR_INVENTARIO{    
     

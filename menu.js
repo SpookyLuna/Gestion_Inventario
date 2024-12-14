@@ -15,6 +15,7 @@ const rl = readline.createInterface({                                //
 const fs = require('fs');                                            //
 //Lectura del json y parseo.                                         //
 const data = JSON.parse(fs.readFileSync('./productos.json', 'utf8'));//   
+const productos = data.PRODUCTOS;                                    //
                                                                      //
 async function input(prompt) {                                       //
     return new Promise(resolve => rl.question(prompt, resolve));     //
@@ -24,7 +25,6 @@ async function input(prompt) {                                       //
 const regex = /[!@#$%^&*()\-+={}[\]:;"'<>,.?\/|\\]/                  //
                                                                      //
 ///////////////////////////////////////////////////////////////////////
-
 
 //Funcion menu
 async function menu(){
@@ -184,7 +184,6 @@ async function buscar_producto(){
 
 async function actualizar_producto(){
     //Actualizar producto
-    const productos = data.PRODUCTOS;
     console.log(`
         === Gestor de Inventario ===
            === Actualizar Producto ===
@@ -231,7 +230,6 @@ async function actualizar_producto(){
             console.clear();
             actualizar_producto();
             break;
-
     }
 }
 
