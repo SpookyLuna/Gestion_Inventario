@@ -1,30 +1,30 @@
 
-///////////////////////////////////////////////////////////////////////
-                                                                     //
-//Import de la case y llamada métodos                                //
-const GESTOR_INVENTARIO = require('./gestor_inventario');            //
-                                                                     //
-//Integracion de readline                                            //
-const readline = require('readline');                                //
-const rl = readline.createInterface({                                //
-    input: process.stdin,                                            //
-    output: process.stdout                                           //
-});                                                                  //
-                                                                     //
-//Imports                                                            //
-const fs = require('fs');                                            //
-//Lectura del json y parseo.                                         //
-const data = JSON.parse(fs.readFileSync('./productos.json', 'utf8'));//   
-const productos = data.PRODUCTOS;                                    //
-                                                                     //
-async function input(prompt) {                                       //
-    return new Promise(resolve => rl.question(prompt, resolve));     //
-}                                                                    //
-                                                                     //
-//Caracteres especiales                                              //
-const regex = /[!@#$%^&*()\-+={}[\]:;"'<>,.?\/|\\]/                  //
-                                                                     //
-///////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+                                                                      //
+//Import de la case y llamada métodos                                 //
+const GESTOR_INVENTARIO = require('./gestor_inventario');             //
+                                                                      //
+//Integracion de readline                                             //
+const readline = require('readline');                                 //
+const rl = readline.createInterface({                                 //
+    input: process.stdin,                                             //
+    output: process.stdout                                            //
+});                                                                   //
+                                                                      //
+//Imports                                                             //
+const fs = require('fs');                                             //
+//Lectura del json y parseo.                                          //
+const data = JSON.parse(fs.readFileSync('./productos.json', 'utf8')); //   
+const productos = data.PRODUCTOS;                                     //
+                                                                      //
+async function input(prompt) {                                        //
+    return new Promise(resolve => rl.question(prompt, resolve));      //
+}                                                                     //
+                                                                      //
+//Caracteres especiales                                               //
+const regex = /[!@#$%^&*()\-+={}[\]:;"'<>,.?\/|\\]/                   //
+                                                                      //
+////////////////////////////////////////////////////////////////////////
 
 //Funcion menu
 async function menu(){
@@ -74,7 +74,7 @@ switch (opcion){
         break;
     case 7:
         console.clear();
-        break;
+        process.exit();
     default:
         console.log("Has seleccionado una opción inválida!");
         menu(); //Sustituyo bucle por volver a llamar la función.
@@ -134,7 +134,7 @@ async function agregar_producto(){
                === Nuevo Producto ===
             `);
         let stock = Number (await input("Introduce el stock del producto: "));
-        while (isNaN(precio) || stock < 0){
+        while (isNaN(stock) || stock < 0){
             console.log("Has especificado un stock inválido (El stock no puede ser negativo)");
             Number (await input("Introduce el stock del producto: "));
         }
@@ -194,62 +194,28 @@ async function actualizar_producto(){
         `);
     
     let opcion = Number(await input ("Selecciona una opción: "));
+    let contador = 0;
     switch (opcion){
         case 1:
-            let contador = 0;
             if (productos.length != 0){
-                productos.forEach(producto => {
-                    contador++;
-                    console.log(`
-                    Producto: ${contador-1}
-                    Nombre: ${producto.nombre}
-                    Categoría: ${producto.categoria}
-                    Precio: ${producto.precio}
-                    Stock: ${producto.stock}
-                    `);
-                });
-
-                let producto_nuevo_stock = Number(await input ("Selecciona el producto: "));
-                if (producto_nuevo_stock >= 0 && producto_nuevo_stock <= productos.length){
-                    let nuevo_stock = Number(await input ("Introduce el nuevo stock: "));
-                    if (nuevo_stock >= 0){
-                        productos[producto_nuevo_stock].stock = nuevo_stock;
-                        //Guardado del producto actualizado en el json
-                        fs.writeFileSync('./productos.json', JSON.stringify(data, null, 4, 'utf8'));
-                        console.log(`Producto ${productos[producto_nuevo_stock].nombre} actualizado correctamente. Nuevo stock: ${productos[producto_nuevo_stock].stock}`);
-                    }
-                }
-                else{
-                    console.log("Has seleccionado un producto inexistente.");
-                    actualizar_producto();
-                }
-            }
-            else{
-                console.log("No hay productos registrados.")
-            }
-            break;
-        case 2:
-            contador = 0;
-            if (productos.length != 0){
-                productos.forEach(producto => {
+                productos.forEach((producto) => {
                     contador++;
                     console.log(`
                     Producto: ${contador}
                     Nombre: ${producto.nombre}
                     Categoría: ${producto.categoria}
-                    Precio: ${producto.precio}
+                    Precio: ${producto.precio} €
                     Stock: ${producto.stock}
                     `);
                 });
 
-                let producto_nuevo_precio = Number(await input ("Selecciona el producto: "));
-                if (producto_nuevo_precio >= 0 && producto_nuevo_precio <= productos.length){
-                    let nuevo_precio = Number(await input ("Introduce el nuevo precio: "));
-                    if (nuevo_precio >= 0){
-                        productos[producto_nuevo_precio].precio = nuevo_precio;
-                        //Guardado del producto actualizado en el json
-                        fs.writeFileSync('./productos.json', JSON.stringify(data, null, 4, 'utf8'));
-                        console.log(`Producto ${productos[producto_nuevo_stock].nombre} actualizado correctamente. Nuevo precio: ${productos[producto_nuevo_precio].precio}`);
+                let producto_nuevo_stock = Number(await input("Selecciona el producto: "));
+                if (producto_nuevo_stock >= 0 && producto_nuevo_stock < productos.length){
+                    let nuevo_stock = Number(await input("Introduce el nuevo stock: "));
+                    if (nuevo_stock >= 0){
+                        const gestor = new GESTOR_INVENTARIO();
+                        gestor.actualizarStock(producto_nuevo_stock, nuevo_stock); //Envia la informacion a gestor inventario
+                        menu(); //Regresa al menu
                     }
                 }
                 else{
@@ -258,9 +224,40 @@ async function actualizar_producto(){
                 }
             }
             else{
-                console.log("No hay productos registrados.")
+                console.log("No hay productos registrados.");
             }
-                break;
+            break;
+        case 2:
+            if (productos.length != 0){
+                productos.forEach((producto) => {
+                    contador++;
+                    console.log(`
+                    Producto: ${contador}
+                    Nombre: ${producto.nombre}
+                    Categoría: ${producto.categoria}
+                    Precio: ${producto.precio} €
+                    Stock: ${producto.stock}
+                    `);
+                });
+
+                let producto_nuevo_precio = Number(await input("Selecciona el producto: "));
+                if (producto_nuevo_precio >= 0 && producto_nuevo_precio < productos.length){
+                    let nuevo_precio = Number(await input("Introduce el nuevo precio: "));
+                    if (nuevo_precio >= 0){
+                        const gestor = new GESTOR_INVENTARIO();
+                        gestor.actualizarPrecio(producto_nuevo_precio, nuevo_precio); //Envia la informacion a gestor inventario
+                        menu(); //Regresa al menu
+                    }
+                }
+                else{
+                    console.log("Has seleccionado un producto inexistente.");
+                    actualizar_producto();
+                }
+            }
+            else{
+                console.log("No hay productos registrados.");
+            }
+            break;
         default:
             console.clear();
             actualizar_producto();

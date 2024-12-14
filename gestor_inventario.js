@@ -5,10 +5,6 @@ const fs = require('fs');                                                       
 //Lectura del json y parseo. No uso require para poder actualizar posteriormente los datos de los productos.          //
 const data = JSON.parse(fs.readFileSync('./productos.json', 'utf8'));                                                 //
 const productos = data.PRODUCTOS;                                                                                     //
-                                                                                                                      //                                                                                                                                                                                                                       //
-async function input(prompt) {                                                                                        //
-    return new Promise(resolve => rl.question(prompt, resolve));                                                      //
-}                                                                                                                     //
                                                                                                                       //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -21,6 +17,7 @@ class GESTOR_INVENTARIO{
         this.stock = stock;
     }
 
+    //Metodo agregar producto
     agregar_producto(){
         
         const nuevo_producto = {
@@ -36,6 +33,7 @@ class GESTOR_INVENTARIO{
         console.log(`Producto: ${this.nombre} guardado correctamente.`);
     }
 
+    //Metodo listar producto
     static listar_producto(){ //Metodo estatico para poder ser llamado desde menu
         console.log(`
             === Gestor de Inventario ===
@@ -46,7 +44,7 @@ class GESTOR_INVENTARIO{
                 console.log(`
                 Nombre: ${producto.nombre}
                 Categoría: ${producto.categoria}
-                Precio: ${producto.precio}
+                Precio: ${producto.precio} €
                 Stock: ${producto.stock}
                 `);
             });
@@ -56,6 +54,7 @@ class GESTOR_INVENTARIO{
         }
     }
 
+    //Metodos buscar producto
     buscar_producto_nombre(){
         const buscar_producto = {
             nombre: this.nombre,
@@ -71,7 +70,7 @@ class GESTOR_INVENTARIO{
                     console.log(`
                 Nombre: ${producto.nombre}
                 Categoria: ${producto.categoria}
-                Precio: ${producto.precio}
+                Precio: ${producto.precio} €
                 Stock: ${producto.stock}
                 `);
                 }
@@ -97,7 +96,7 @@ class GESTOR_INVENTARIO{
                     console.log(`
                 Nombre: ${producto.nombre}
                 Categoria: ${producto.categoria}
-                Precio: ${producto.precio}
+                Precio: ${producto.precio} €
                 Stock: ${producto.stock}
                 `);
                 }
@@ -108,8 +107,25 @@ class GESTOR_INVENTARIO{
         }
     }
 
-    static async actualizar_stock(){
+    //Metodos actualizar productos
+    actualizarStock(producto, nuevo_stock) {
+        if (producto >= 0 && producto < productos.length) {
+            productos[producto].stock = nuevo_stock;
+            console.log(`Stock del producto "${productos[producto].nombre}" actualizado a ${nuevo_stock}.`);
+            fs.writeFileSync("./productos.json", JSON.stringify(data, null, 4, 'utf8'));
+        } else {
+            console.log("Has seleccionado un producto inválido.");
+        }
+    }
 
+    actualizarPrecio(producto, nuevo_precio) {
+        if (producto >= 0 && producto < productos.length) {
+            productos[producto].precio = nuevo_precio;
+            console.log(`Precio del producto "${productos[producto].nombre}" actualizado a ${nuevo_precio} €.`);
+            fs.writeFileSync("./productos.json", JSON.stringify(data, null, 4, 'utf8'));
+        } else {
+            console.log("Has seleccionado un producto inválido.");
+        }
     }
 }
 
