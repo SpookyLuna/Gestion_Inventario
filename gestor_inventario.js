@@ -81,32 +81,6 @@ class GESTOR_INVENTARIO{
         }
     }
     
-    buscar_producto_categoria(){
-        const buscar_producto = {
-            categoria: this.categoria,
-        }
-        if (productos.length != 0){
-            productos.forEach(producto => {
-                if(buscar_producto.categoria.toLowerCase() === producto.categoria.toLowerCase()){
-                    console.clear();
-                    console.log(`
-            === Gestor de Inventario ===
-            === Buscar por Categoria ===
-                        `);
-                    console.log(`
-                Nombre: ${producto.nombre}
-                Categoria: ${producto.categoria}
-                Precio: ${producto.precio} €
-                Stock: ${producto.stock}
-                `);
-                }
-            });
-        }
-        else{
-            console.log("No se han encontrado productos con esa categoria.");
-        }
-    }
-
     //Metodos actualizar productos
     actualizarStock(producto, nuevo_stock) {
         if (producto >= 0 && producto < productos.length) {

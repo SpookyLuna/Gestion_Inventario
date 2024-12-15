@@ -149,13 +149,13 @@ async function agregar_producto(){
 
 async function buscar_producto(){
     //Buscar producto
+    let regreso;
     console.log(`
         === Gestor de Inventario ===
            === Buscar Producto ===
 
            1-Nombre
-           2-Categoria
-           3-Volver
+           2-Volver
         `);
     
     let opcion = Number(await input ("Selecciona el filtro de búsqueda: "));
@@ -164,19 +164,11 @@ async function buscar_producto(){
             let nombre = await input ("Introduce el nombre: ");
             const nombre_buscar = new GESTOR_INVENTARIO(nombre);
             nombre_buscar.buscar_producto_nombre();
-            let regreso = await input ("Pulsa enter para volver...");
+            regreso = await input ("Pulsa enter para volver...");
                 console.clear();
                 menu();
             break;
         case 2:
-            let categoria = await input ("Introduce la categoria: ");
-            const categoria_buscar = new GESTOR_INVENTARIO(categoria);
-            categoria_buscar.buscar_producto_categoria();
-                regreso = await input ("Pulsa enter para volver...");
-                console.clear();
-                menu();
-                break;
-        case 3:
             console.clear();
             menu();
             break;
@@ -301,6 +293,7 @@ async function eliminar_producto(){
                 case "s":  case "S":
                     const gestor = new GESTOR_INVENTARIO();
                     gestor.eliminarProducto(producto_eliminar); //Envia la informacion a gestor inventario
+                    console.clear();
                     menu(); //Regresa al menu
                     break;
                 case "n": case "N":
@@ -320,6 +313,9 @@ async function eliminar_producto(){
     }
     else{
         console.log("No hay productos registrados.");
+        regreso = await input ("Pulsa enter para volver...");
+        console.clear();
+        menu();
     }
 }
 
