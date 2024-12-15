@@ -53,7 +53,7 @@ switch (opcion){
     case 2:
         console.clear();
         GESTOR_INVENTARIO.listar_producto();
-        let regreso = await input ("Pulsa enter para volver...");
+        await input ("Pulsa enter para volver...");
             console.clear();
             menu();
         break;
@@ -71,6 +71,10 @@ switch (opcion){
         break;
     case 6:
         console.clear();
+        GESTOR_INVENTARIO.mostrar_estadisticas();
+        await input ("Pulsa enter para volver...");
+            console.clear();
+            menu();
         break;
     case 7:
         console.clear();
@@ -149,13 +153,13 @@ async function agregar_producto(){
 
 async function buscar_producto(){
     //Buscar producto
-    let regreso;
     console.log(`
         === Gestor de Inventario ===
            === Buscar Producto ===
 
            1-Nombre
-           2-Volver
+           2-Categoria
+           3-Volver
         `);
     
     let opcion = Number(await input ("Selecciona el filtro de búsqueda: "));
@@ -164,11 +168,19 @@ async function buscar_producto(){
             let nombre = await input ("Introduce el nombre: ");
             const nombre_buscar = new GESTOR_INVENTARIO(nombre);
             nombre_buscar.buscar_producto_nombre();
-            regreso = await input ("Pulsa enter para volver...");
+            await input ("Pulsa enter para volver...");
                 console.clear();
                 menu();
             break;
         case 2:
+            let categoria = await input ("Introduce la categoria: ");
+            const categoria_buscar = new GESTOR_INVENTARIO(null, categoria); //Pasa valor nulo para evitar la asignacion de categoria en nombre y undefined en categoria
+            categoria_buscar.buscar_producto_categoria();
+            await input ("Pulsa enter para volver...");
+                console.clear();
+                menu();
+            break;
+        case 3:
             console.clear();
             menu();
             break;
@@ -202,7 +214,7 @@ async function actualizar_producto(){
                     Producto: ${contador-1}
                     Nombre: ${producto.nombre}
                     Categoría: ${producto.categoria}
-                    Precio: ${producto.precio} €
+                    Precio: ${producto.precio}€
                     Stock: ${producto.stock}
                     `);
                 });
@@ -233,7 +245,7 @@ async function actualizar_producto(){
                     Producto: ${contador-1}
                     Nombre: ${producto.nombre}
                     Categoría: ${producto.categoria}
-                    Precio: ${producto.precio} €
+                    Precio: ${producto.precio}€
                     Stock: ${producto.stock}
                     `);
                 });
@@ -281,7 +293,7 @@ async function eliminar_producto(){
             Producto: ${contador-1}
             Nombre: ${producto.nombre}
             Categoría: ${producto.categoria}
-            Precio: ${producto.precio} €
+            Precio: ${producto.precio}€
             Stock: ${producto.stock}
             `);
         });

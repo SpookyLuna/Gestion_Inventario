@@ -1,3 +1,22 @@
 {
-    "PRODUCTOS": []
+    "PRODUCTOS": [
+        {
+            "nombre": "Tornillos",
+            "categoria": "Ferreteria",
+            "precio": 0.6,
+            "stock": 100
+        },
+        {
+            "nombre": "Llave Inglesa",
+            "categoria": "Ferreteria",
+            "precio": 12,
+            "stock": 30
+        },
+        {
+            "nombre": "Chanclas",
+            "categoria": "Calzado",
+            "precio": 5,
+            "stock": 40
+        }
+    ]
 }

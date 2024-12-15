@@ -27,10 +27,23 @@ class GESTOR_INVENTARIO{
             stock: this.stock
         };
 
-        //Pusheo el nuevo producto y lo guardo en el json
-        data.PRODUCTOS.push(nuevo_producto);
-        fs.writeFileSync('./productos.json', JSON.stringify(data, null, 4), 'utf8');
-        console.log(`Producto: ${this.nombre} guardado correctamente.`);
+        let producto_duplicado = false;
+        if (productos.length != 0){
+            productos.forEach(producto => {
+                if(nuevo_producto.nombre.toLowerCase === producto.nombre.toLowerCase){ //Comprueba que el producto no esté ya registrado
+                    producto_duplicado = true;
+                }
+                else{
+                    //Pusheo el nuevo producto y lo guardo en el json
+                    data.PRODUCTOS.push(nuevo_producto);
+                    fs.writeFileSync('./productos.json', JSON.stringify(data, null, 4), 'utf8');
+                    console.log(`Producto: ${this.nombre} guardado correctamente.`);
+                }
+            });
+        }
+        if (producto_duplicado == true){
+            console.log("Producto duplicado, se ha cancelado el agregado de producto!");
+        }
     }
 
     //Metodo listar producto
@@ -44,7 +57,7 @@ class GESTOR_INVENTARIO{
                 console.log(`
                 Nombre: ${producto.nombre}
                 Categoría: ${producto.categoria}
-                Precio: ${producto.precio} €
+                Precio: ${producto.precio}€
                 Stock: ${producto.stock}
                 `);
             });
@@ -59,25 +72,68 @@ class GESTOR_INVENTARIO{
         const buscar_producto = {
             nombre: this.nombre,
         }
+        let productos_encontrados = 0;
         if (productos.length != 0){
             productos.forEach(producto => {
                 if(buscar_producto.nombre.toLowerCase() === producto.nombre.toLowerCase()){
                     console.clear();
+                    productos_encontrados++;
                     console.log(`
             === Gestor de Inventario ===
              === Buscar por Nombre ===
                         `);
                     console.log(`
+
+            Se han encontrado ${productos_encontrados} coincidencias:
+
                 Nombre: ${producto.nombre}
                 Categoria: ${producto.categoria}
-                Precio: ${producto.precio} €
+                Precio: ${producto.precio}€
                 Stock: ${producto.stock}
                 `);
                 }
             });
         }
         else{
-            console.log("No se han encontrado productos con ese nombre.");
+            console.log("No hay productos registrados.");
+        }
+        if (productos_encontrados == 0){
+            console.log("No se han encontrado coincidencias.")
+        }
+    }
+    
+    buscar_producto_categoria(){
+        const buscar_producto = {
+            categoria: this.categoria,
+        }
+        
+        let productos_encontrados = 0;
+        if (productos.length != 0) {
+            productos.forEach(producto => {
+                if (buscar_producto.categoria.toLowerCase() === producto.categoria.toLowerCase()) {
+                    console.clear();
+                    productos_encontrados++;
+                    console.log(`
+            === Gestor de Inventario ===
+            === Buscar por Categoría ===
+                    `);
+                    console.log(`
+
+            Se han encontrado ${productos_encontrados} coincidencias:
+
+                Nombre: ${producto.nombre}
+                Categoría: ${producto.categoria}
+                Precio: ${producto.precio}€
+                Stock: ${producto.stock}
+                `);
+                }
+            });
+        }
+        else {
+            console.log("No hay productos registrados.");
+        }
+        if (productos_encontrados == 0){
+            console.log("No se han encontrado coincidencias.")
         }
     }
     
@@ -95,7 +151,7 @@ class GESTOR_INVENTARIO{
     actualizarPrecio(producto, nuevo_precio) {
         if (producto >= 0 && producto < productos.length) {
             productos[producto].precio = nuevo_precio;
-            console.log(`Precio del producto "${productos[producto].nombre}" actualizado a ${nuevo_precio} €.`);
+            console.log(`Precio del producto "${productos[producto].nombre}" actualizado a ${nuevo_precio}€.`);
             fs.writeFileSync("./productos.json", JSON.stringify(data, null, 4, 'utf8'));
         } else {
             console.log("Has seleccionado un producto inválido.");
@@ -110,6 +166,36 @@ class GESTOR_INVENTARIO{
             fs.writeFileSync('./productos.json', JSON.stringify(data, null, 4), 'utf8');
         } else {
             console.log("Has seleccionado un producto inválido.");
+        }
+    }
+
+    //Mostrar Estadisticas
+    static mostrar_estadisticas(){ //Metodo estático para ser llamada directamente
+        console.log(`
+            === Gestor de Inventario ===
+               === Estadísticas ===
+            `);
+        let contador_productos = 0;
+        let categorias = [];
+        let valor_total_stock = 0;
+        if (productos.length != 0){
+            productos.forEach(producto => {
+                contador_productos++;
+                valor_total_stock += producto.precio;
+                if (producto.categoria != undefined && categorias.includes(producto.categoria)){
+                }
+                else{
+                    categorias.push(producto.categoria);
+                }
+            });
+            console.log(`
+                Total de productos: ${contador_productos}
+                Categorias existentes: ${categorias}
+                Valor total de stock: ${valor_total_stock}€
+            `)
+        }
+        else{
+            console.log("No se han encontrado productos con ese nombre.");
         }
     }
 }
