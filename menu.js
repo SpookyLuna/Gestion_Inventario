@@ -81,6 +81,7 @@ switch (opcion){
         process.exit();
     default:
         console.log("Has seleccionado una opción inválida!");
+        console.clear();
         menu(); //Sustituyo bucle por volver a llamar la función.
         break;
     }
