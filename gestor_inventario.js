@@ -107,19 +107,17 @@ class GESTOR_INVENTARIO{
             categoria: this.categoria,
         }
         
+        console.clear();
+        console.log(`
+            === Gestor de Inventario ===
+            === Buscar por Categoría ===
+                    `);
         let productos_encontrados = 0;
         if (productos.length != 0) {
             productos.forEach(producto => {
                 if (buscar_producto.categoria.toLowerCase() === producto.categoria.toLowerCase()) {
-                    console.clear();
                     productos_encontrados++;
                     console.log(`
-            === Gestor de Inventario ===
-            === Buscar por Categoría ===
-                    `);
-                    console.log(`
-
-            Se han encontrado ${productos_encontrados} coincidencias:
 
                 Nombre: ${producto.nombre}
                 Categoría: ${producto.categoria}

@@ -100,7 +100,7 @@ async function agregar_producto(){
                === Nuevo Producto ===
             `)
         let nombre = await input ("Introduce el nombre del producto: ");
-        while (nombre == "" || regex.test(nombre) == true){
+        while (nombre == "" || regex.test(nombre) == true){ //Comprueba que no se empleen caracteres especiales
             console.log("Has especificado un nombre vacio o inválido. No emplees caracteres especiales!");
             nombre = await input ("Introduce el nombre del producto: ");
         }
