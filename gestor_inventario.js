@@ -130,7 +130,7 @@ class GESTOR_INVENTARIO{
     
     //Metodo eliminar producto
     eliminarProducto(producto) {
-        if (producto >= 0 && u < productos.length) {
+        if (producto >= 0 && producto < productos.length) {
             const productoEliminado = productos.splice(producto, 1); //Uso de splice para reindexar la cadena
             console.log(`Producto "${productoEliminado[0].nombre}" eliminado correctamente.`);
             fs.writeFileSync('./productos.json', JSON.stringify(data, null, 4), 'utf8');

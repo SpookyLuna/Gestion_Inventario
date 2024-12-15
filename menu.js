@@ -155,6 +155,7 @@ async function buscar_producto(){
 
            1-Nombre
            2-Categoria
+           3-Volver
         `);
     
     let opcion = Number(await input ("Selecciona el filtro de búsqueda: "));
@@ -175,6 +176,10 @@ async function buscar_producto(){
                 console.clear();
                 menu();
                 break;
+        case 3:
+            console.clear();
+            menu();
+            break;
         default:
             console.clear();
             buscar_producto();
@@ -191,6 +196,7 @@ async function actualizar_producto(){
 
            1-Stock
            2-Precio
+           3-Volver
         `);
     
     let opcion = Number(await input ("Selecciona una opción: "));
@@ -201,7 +207,7 @@ async function actualizar_producto(){
                 productos.forEach((producto) => {
                     contador++;
                     console.log(`
-                    Producto: ${contador}
+                    Producto: ${contador-1}
                     Nombre: ${producto.nombre}
                     Categoría: ${producto.categoria}
                     Precio: ${producto.precio} €
@@ -232,7 +238,7 @@ async function actualizar_producto(){
                 productos.forEach((producto) => {
                     contador++;
                     console.log(`
-                    Producto: ${contador}
+                    Producto: ${contador-1}
                     Nombre: ${producto.nombre}
                     Categoría: ${producto.categoria}
                     Precio: ${producto.precio} €
@@ -258,6 +264,10 @@ async function actualizar_producto(){
                 console.log("No hay productos registrados.");
             }
             break;
+        case 3:
+            console.clear();
+            menu();
+            break;
         default:
             console.clear();
             actualizar_producto();
@@ -276,7 +286,7 @@ async function eliminar_producto(){
         productos.forEach(producto => {
             contador++;
             console.log(`
-            Producto: ${contador}
+            Producto: ${contador-1}
             Nombre: ${producto.nombre}
             Categoría: ${producto.categoria}
             Precio: ${producto.precio} €
@@ -286,7 +296,7 @@ async function eliminar_producto(){
 
         let producto_eliminar = Number(await input ("Selecciona el producto a eliminar: "));
         if (producto_eliminar >= 0 && producto_eliminar <= productos.length){
-            let confirmacion = await input (`¿Estás seguro de que quieres eliminar el producto ${productos[producto_eliminar].nombre}?`);
+            let confirmacion = await input (`¿Estás seguro de que quieres eliminar el producto ${productos[producto_eliminar].nombre}? (S/N): `);
             switch (confirmacion){
                 case "s":  case "S":
                     const gestor = new GESTOR_INVENTARIO();
