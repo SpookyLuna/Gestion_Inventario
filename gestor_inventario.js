@@ -30,19 +30,22 @@ class GESTOR_INVENTARIO{
         let producto_duplicado = false;
         if (productos.length != 0){
             productos.forEach(producto => {
-                if(nuevo_producto.nombre.toLowerCase === producto.nombre.toLowerCase){ //Comprueba que el producto no esté ya registrado
+                if(nuevo_producto.nombre.toLowerCase() === producto.nombre.toLowerCase()){ //Comprueba que el producto no esté ya registrado
                     producto_duplicado = true;
                 }
                 else{
-                    //Pusheo el nuevo producto y lo guardo en el json
-                    data.PRODUCTOS.push(nuevo_producto);
-                    fs.writeFileSync('./productos.json', JSON.stringify(data, null, 4), 'utf8');
-                    console.log(`Producto: ${this.nombre} guardado correctamente.`);
+                    producto_duplicado = false;
                 }
             });
         }
         if (producto_duplicado == true){
             console.log("Producto duplicado, se ha cancelado el agregado de producto!");
+        }
+        else{
+            //Pusheo el nuevo producto y lo guardo en el json
+            data.PRODUCTOS.push(nuevo_producto);
+            fs.writeFileSync('./productos.json', JSON.stringify(data, null, 4), 'utf8');
+            console.log(`Producto: ${this.nombre} guardado correctamente.`);
         }
     }
 
